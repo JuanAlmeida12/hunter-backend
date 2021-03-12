@@ -4,5 +4,7 @@ node_js:
  - 13
  - 14
  - 15
-before_script: yarn
-script: yarn test
+before_script:
+  - yarn
+  - yarn add coveralls
+script: yarn test | coveralls
