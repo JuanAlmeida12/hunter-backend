@@ -7,4 +7,7 @@ module.exports = (server) => {
 
     // Dummy route
     require('./dummy')(router)
+
+    // Candidate route
+    require('./candidate')(router)
 }
