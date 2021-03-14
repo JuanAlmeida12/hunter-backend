@@ -10,8 +10,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(allowCors)
 
-const server = app.listen(port, () => {
-    console.log(`Server running at port: ${port}`)
-})
+const server = app.listen(port)
 
 module.exports = { server, app }

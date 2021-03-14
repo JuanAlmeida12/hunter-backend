@@ -1,5 +1,7 @@
+let validatorCandidate = require('@utils/validator')
 const buildMakeCandidate = require('./candidate')
 const candidateSchema = require('./candidate-vs')
-const validatorCandidate = require('@utils/validator')(candidateSchema)
+
+validatorCandidate = validatorCandidate(candidateSchema)
 
 module.exports = buildMakeCandidate(validatorCandidate)

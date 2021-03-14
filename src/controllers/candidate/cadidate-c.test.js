@@ -1,26 +1,28 @@
 const candidateController = require('./index')
 
+const connection = require('@database/connection')
+
 describe('await candidateController', () => {
     beforeEach(async () => {
-        await candidateController.drop();
+        await candidateController.drop()
 
         const candidateSeed1 = {
             id: 1,
-            city: "Some city",
-            experience: "1-2 years",
+            city: 'Some city',
+            experience: '1-2 years',
             technologies: [{
-                name: "Java",
-                is_main_tech: true
-            }]
+                name: 'Java',
+                is_main_tech: true,
+            }],
         }
         const candidateSeed2 = {
             id: 2,
-            city: "Some city",
-            experience: "3-5 years",
+            city: 'Some city',
+            experience: '3-5 years',
             technologies: [{
-                name: "Python",
-                is_main_tech: true
-            }]
+                name: 'Python',
+                is_main_tech: true,
+            }],
         }
         await candidateController.add(candidateSeed1)
         await candidateController.add(candidateSeed2)
@@ -40,22 +42,48 @@ describe('await candidateController', () => {
 
     it('find single candidate by id', async () => {
         const candidates = await candidateController.list()
-        const id = candidates[0].id
+        const { id } = candidates[0]
 
         const candidate = await candidateController.find({ id })
         const output = candidate[0].id
         expect(output).toEqual(id)
     })
 
+
+    it('search candidate', async () => {
+        const candidates = await candidateController.search(['Java'])
+        expect(candidates.length).toEqual(1)
+    })
+
+    it('search candidate with city', async () => {
+        const candidates = await candidateController.search(['Java'], 'Some city')
+        expect(candidates.length).toEqual(1)
+    })
+
+    it('search candidate with city array', async () => {
+        const candidates = await candidateController.search(['Java'], ['Some city'])
+        expect(candidates.length).toEqual(1)
+    })
+
+    it('search candidate with experience', async () => {
+        const candidates = await candidateController.search(['Java'], ['Some city'], '1-2 years')
+        expect(candidates.length).toEqual(1)
+    })
+
+    it('search candidate with experience array', async () => {
+        const candidates = await candidateController.search(['Java'], ['Some city'], ['1-2 years'])
+        expect(candidates.length).toEqual(1)
+    })
+
     it('inserts a candidate', async () => {
         const newCandidate = {
             id: 4,
-            city: "Some city",
-            experience: "15+ years",
+            city: 'Some city',
+            experience: '15+ years',
             technologies: [{
-                name: "Python",
-                is_main_tech: true
-            }]
+                name: 'Python',
+                is_main_tech: true,
+            }],
         }
 
         const output = await candidateController.add(newCandidate)
@@ -65,7 +93,7 @@ describe('await candidateController', () => {
 
     it('deletes a candidate', async () => {
         const candidates = await candidateController.list()
-        const id = candidates[0].id
+        const { id } = candidates[0]
         await candidateController.remove(id)
 
         const newCandidates = await candidateController.list()
@@ -74,4 +102,10 @@ describe('await candidateController', () => {
         expect(newCandidates.length).toBeLessThan(candidates.length)
     })
 
+    afterAll(async () => {
+
+        await connection.connection.dropDatabase();
+
+        await connection.connection.close();
+    })
 })
