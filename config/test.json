@@ -1,0 +1,9 @@
+{
+    "db_config": {
+        "host": "cluster0.nmtod.mongodb.net",
+        "database": "hunterTest",
+        "user": "admin",
+        "password": "admin",
+        "srv": true
+    }
+}

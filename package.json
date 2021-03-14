@@ -4,10 +4,11 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon",
-    "production": "pm2 start src/app.js --name 'Hunter API'",
-    "test": "jest --ci --runInBand --coverage --coverageReporters=text-lcov",
-    "test:watch": "jest --watch"
+    "dev": "cross-env NODE_ENV=dev nodemon",
+    "production": "cross-env NODE_ENV=production pm2 start src/index.js --name 'Hunter API'",
+    "test": "cross-env NODE_ENV=test jest --coverage --no-cache --coverageReporters=text-lcov --forceExit",
+    "eslint": "eslint . --fix",
+    "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "repository": {
     "type": "git",
@@ -21,14 +22,47 @@
   },
   "homepage": "https://github.com/JuanAlmeida12/hunter-backend#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
+    "config": "^3.3.6",
+    "cron": "^1.8.2",
     "express": "^4.17.1",
-    "pm2": "^4.5.5"
+    "joi": "^17.4.0",
+    "module-alias": "^2.2.2",
+    "mongoose": "^5.12.0",
+    "pm2": "^4.5.5",
+    "ramda": "^0.27.1",
+    "rand-token": "^1.0.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^7.22.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
     "jest": "^26.6.3",
     "jest-junit": "^12.0.0",
     "nodemon": "^2.0.7",
     "supertest": "^6.1.3"
+  },
+  "_moduleAliases": {
+    "~root": ".",
+    "@database": "src/database",
+    "@controller": "src/controllers",
+    "@job": "src/job",
+    "@models": "src/models",
+    "@utils": "src/utils"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@models(.*)$": "<rootDir>/src/models$1",
+      "^@database(.*)$": "<rootDir>/src/database$1",
+      "^@controller(.*)$": "<rootDir>/src/controllers$1",
+      "^@job(.*)$": "<rootDir>/src/job$1",
+      "^@utils(.*)$": "<rootDir>/src/utils$1"
+    },
+    "collectCoverageFrom": [
+      "src/**/{!(connection),}.js"
+    ]
   }
 }
