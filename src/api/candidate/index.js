@@ -11,4 +11,16 @@ module.exports = (router) => {
       res.json(candidates)
     })
   })
+
+  router.get(`${CANDIDATE_BASE_URL}/cities`, (req, res) => {
+    candidateController.cities().then((cities) => {
+      res.json(cities)
+    })
+  })
+
+  router.get(`${CANDIDATE_BASE_URL}/experiencies`, (req, res) => {
+    candidateController.experiencies().then((experiencies) => {
+      res.json(experiencies)
+    })
+  })
 }

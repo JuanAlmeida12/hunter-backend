@@ -8,7 +8,18 @@ const list = () => candidateDB.find({}).then(serialize)
 const find = (query) => candidateDB.find(query).then(serialize)
 
 const search = (techs, city, experience) => {
-  const query = { $text: { $search: join(' ', techs) } }
+  const query = { }
+  let toQuery = ''
+
+  if (techs) {
+    if (Array.isArray(techs)) {
+      toQuery = join(' ', techs || [])
+    } else {
+      toQuery = techs
+    }
+  }
+
+  query.$text = { $search: toQuery }
 
   if (city) {
     if (Array.isArray(city)) {
@@ -26,7 +37,7 @@ const search = (techs, city, experience) => {
     }
   }
 
-  return candidateDB.find(query, { score: { $meta: 'textScore' } })
+  return candidateDB.find(query, '$text' in query && { score: { $meta: 'textScore' } })
     .sort({ score: { $meta: 'textScore' } })
     .limit(5)
     .then(serialize)
@@ -46,6 +57,10 @@ const add = async (candidate) => {
   return find({ id: validCandidate.getID() })
 }
 
+const cities = () => candidateDB.distinct('city')
+
+const experiencies = () => candidateDB.distinct('experience')
+
 const remove = (id) => candidateDB.remove({ id }).then(serialize)
 
 const drop = () => candidateDB.remove({}).then(serialize)
@@ -55,6 +70,8 @@ module.exports = {
   find,
   search,
   add,
+  cities,
+  experiencies,
   remove,
   drop,
 }

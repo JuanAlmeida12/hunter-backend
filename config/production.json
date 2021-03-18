@@ -1,7 +1,9 @@
 {
     "db_config": {
-        "host": "localhost",
-        "port": 27017,
-        "database": "hunterProd"
+        "host": "cluster0.nmtod.mongodb.net",
+        "database": "hunterProd",
+        "user": "admin",
+        "password": "admin",
+        "srv": true
     }
 }
