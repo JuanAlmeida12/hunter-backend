@@ -35,6 +35,20 @@ describe('API /api/candidate', () => {
             .expect(200, done)
     })
 
+    it('GET /api/candidate/cities', (done) => {
+        API.get('/api/candidate/cities')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, done)
+    })
+
+    it('GET /api/candidate/experiencies', (done) => {
+        API.get('/api/candidate/experiencies')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, done)
+    })
+
     afterAll(async done => {
 
         await connection.connection.dropDatabase()

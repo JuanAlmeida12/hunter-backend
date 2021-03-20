@@ -49,8 +49,13 @@ describe('await candidateController', () => {
         expect(output).toEqual(id)
     })
 
-
+    
     it('search candidate', async () => {
+        const candidates = await candidateController.search('Java')
+        expect(candidates.length).toEqual(1)
+    })
+
+    it('search candidate with tech array', async () => {
         const candidates = await candidateController.search(['Java'])
         expect(candidates.length).toEqual(1)
     })
@@ -73,6 +78,40 @@ describe('await candidateController', () => {
     it('search candidate with experience array', async () => {
         const candidates = await candidateController.search(['Java'], ['Some city'], ['1-2 years'])
         expect(candidates.length).toEqual(1)
+    })
+
+    it('get experiencies', async () => {
+        let experiencies = await candidateController.experiencies()
+        expect(experiencies.length).toEqual(2)
+        await candidateController.add({
+            id: 4,
+            city: 'Some city 2',
+            experience: '15+ years',
+            technologies: [{
+                name: 'Python',
+                is_main_tech: true,
+            }],
+        })
+
+        experiencies = await candidateController.experiencies()
+        expect(experiencies.length).toEqual(3)
+    })
+
+    it('get Cities', async () => {
+        let cities = await candidateController.cities()
+        expect(cities.length).toEqual(1)
+        await candidateController.add({
+            id: 4,
+            city: 'Some city 2',
+            experience: '15+ years',
+            technologies: [{
+                name: 'Python',
+                is_main_tech: true,
+            }],
+        })
+
+        cities = await candidateController.cities()
+        expect(cities.length).toEqual(2)
     })
 
     it('inserts a candidate', async () => {
